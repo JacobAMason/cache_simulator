@@ -2,9 +2,7 @@
 ## us from spending time writing a CLI (though, argparse would probably be easier
 
 import sys
-
-numMisses = 0
-numAccesses = 0
+import Cache
 
 if (len(sys.argv) < 2):
     print "Usage: sys.argv[0] infile <options>"
@@ -51,7 +49,7 @@ fname, usize, ubsize, uassoc, urepl, uwalloc)
 
 print s
 
-# dosim(fname,usize,ubsize,uassoc,urepl,uwalloc)
+numMisses, numAccesses = Cache.Cache(fname,usize,ubsize,uassoc,urepl,uwalloc).dosim()
 
 print "Demand Accesses  ", numAccesses
 print "Demand Misses ", numMisses

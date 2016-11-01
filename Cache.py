@@ -14,31 +14,37 @@ class Cache(object):
 
     def dosim(self):
         print "Number of cache lines is:", self.numCacheLines
-        self.numMisses = 0
-        numAccesses = 0
+        numMisses = 0
+        numAccesses = 1
         with open(self.fname) as din:
             for line in din:
                 line = line.split()
+                if not line:
+                    continue
                 label = int(line[0])
                 address = int(line[1], 16)
                 if label == 0 or label == 2:
-                    self.read(address)
+                    if not self.read(address):
+                        numMisses += 1
                 elif label == 1:
-                    self.write(address)
+                    if not self.write(address):
+                        numMisses += 1
                 else:
                     raise ValueError("Unknown label: " + line[0])
                 numAccesses += 1
-        return self.numMisses, numAccesses
+        return numMisses, numAccesses
 
     def read(self, address):
         cacheLine = self.get_cache_line(address)
         tag = self.get_tag(address)
-        cacheLine.read(tag)
+        print "Reading", address, "on line", self.cacheLines.index(cacheLine), "with tag", tag
+        return cacheLine.read(tag)
 
     def write(self, address):
         cacheLine = self.get_cache_line(address)
         tag = self.get_tag(address)
-        cacheLine.write(tag)
+        print "Writing", address, "on line", self.cacheLines.index(cacheLine), "with tag", tag
+        return cacheLine.write(tag)
 
     def get_cache_line(self, address):
         block_address = self.get_block_address(address)
