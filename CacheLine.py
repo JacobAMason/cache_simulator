@@ -1,3 +1,5 @@
+import logging
+
 from CacheBlock import CacheBlock
 
 
@@ -17,12 +19,12 @@ class CacheLine(object):
     def write(self, tag):
         block = self.get_block(tag)
         if block is None or not block.valid:
-            print "MISS", "(block not valid)" if block is not None else ""
+            logging.info("MISS %s", "(block not valid)" if block is not None else "")
             if self.write_allocation_strategy == 'a':
                 self.replace(tag)
             return False
         else:
-            print "HIT"
+            logging.info("HIT")
             block.write(tag)
             self.increment_LRU_counters()
             return True
@@ -30,25 +32,25 @@ class CacheLine(object):
     def read(self, tag):
         block = self.get_block(tag)
         if block is None or not block.valid:
-            print "MISS"
+            logging.info("MISS")
             self.replace(tag)
             return False
         else:
-            print "HIT"
+            logging.info("HIT")
             block.read()
             self.increment_LRU_counters()
             return True
 
     def replace_LRU(self, tag):
-        print "performing an LRU replace"
+        logging.info("performing an LRU replace")
         maxLRUblock = self.blocks[0]
         i=0
         for block in self.blocks:
             i+=1
             if block.LRU_counter > maxLRUblock.LRU_counter:
                 maxLRUblock = block
-            print "block", i, ":", block.LRU_counter
-        print "Picked first block with counter", maxLRUblock.LRU_counter
+            logging.info("block %d: LRU %d", i, block.LRU_counter)
+        logging.info("Picked first block with counter %d", maxLRUblock.LRU_counter)
         maxLRUblock.write(tag)
         self.increment_LRU_counters()
 

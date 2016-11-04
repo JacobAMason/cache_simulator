@@ -1,5 +1,5 @@
+import logging
 from CacheLine import CacheLine
-
 
 class Cache(object):
     def __init__(self, fname, usize, ubsize, uassoc, urepl, uwalloc):
@@ -37,13 +37,13 @@ class Cache(object):
     def read(self, address):
         cacheLine = self.get_cache_line(address)
         tag = self.get_tag(address)
-        print "Reading", address, "on line", self.cacheLines.index(cacheLine), "with tag", tag
+        logging.info("Reading %d on line %d with tag %d", address, self.cacheLines.index(cacheLine), tag)
         return cacheLine.read(tag)
 
     def write(self, address):
         cacheLine = self.get_cache_line(address)
         tag = self.get_tag(address)
-        print "Writing", address, "on line", self.cacheLines.index(cacheLine), "with tag", tag
+        logging.info("Writing %d on line %d with tag %d", address, self.cacheLines.index(cacheLine), tag)
         return cacheLine.write(tag)
 
     def get_cache_line(self, address):
