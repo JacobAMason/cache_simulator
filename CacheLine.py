@@ -39,7 +39,6 @@ class CacheLine(object):
             self.increment_LRU_counters()
             return True
 
-    # TODO: This function is probably generating the errors
     def replace_LRU(self, tag):
         print "performing an LRU replace"
         maxLRUblock = self.blocks[0]

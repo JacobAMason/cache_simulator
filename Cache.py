@@ -15,7 +15,7 @@ class Cache(object):
     def dosim(self):
         print "Number of cache lines is:", self.numCacheLines
         numMisses = 0
-        numAccesses = 1
+        numAccesses = 0
         with open(self.fname) as din:
             for line in din:
                 line = line.split()
